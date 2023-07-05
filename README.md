@@ -1,1 +1,1 @@
-# balancer-core
+# Balancer Core
