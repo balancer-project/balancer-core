@@ -13,15 +13,16 @@
     <groupId>io.juancrrn</groupId>
     <artifactId>balancer-core</artifactId>
     <name>${project.artifactId}</name>
-
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
         <java.version>17</java.version>
         <kotlin.version>1.8.22</kotlin.version>
-        <maven.surfire.version>3.1.2</maven.surfire.version>
+        <kotlin.compiler.incremental>true</kotlin.compiler.incremental>
         <jacoco.version>0.8.10</jacoco.version>
+        <maven-surfire-plugin.version>3.1.2</maven-surfire-plugin.version>
+        <ktlint.version>0.50.0</ktlint.version>
     </properties>
 
     <modules>
@@ -36,6 +37,20 @@
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
             <artifactId>kotlin-reflect</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-reactor</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -54,18 +69,13 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven.surfire.version}</version>
+                <version>${maven-surfire-plugin.version}</version>
             </plugin>
+
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${jacoco.version}</version>
-
-                <configuration>
-                    <excludes>
-                    </excludes>
-                </configuration>
-
                 <executions>
                     <execution>
                         <id>jacoco-prepare-agent</id>
@@ -92,6 +102,7 @@
                         <skip>true</skip>
                     </configuration>
                 </plugin>
+
                 <plugin>
                     <groupId>org.jetbrains.kotlin</groupId>
                     <artifactId>kotlin-maven-plugin</artifactId>
@@ -111,6 +122,7 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-antrun-plugin</artifactId>
@@ -136,7 +148,7 @@
                         <dependency>
                             <groupId>com.pinterest</groupId>
                             <artifactId>ktlint</artifactId>
-                            <version>0.46.1</version>
+                            <version>${ktlint.version}</version>
                         </dependency>
                     </dependencies>
                 </plugin>
