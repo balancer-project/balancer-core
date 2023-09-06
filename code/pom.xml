@@ -26,7 +26,14 @@
     </properties>
 
     <modules>
+        <module>api/event-listeners</module>
+        <module>api/rest-server</module>
+        <module>application</module>
+        <module>boot</module>
         <module>domain</module>
+        <module>infrastructure/database</module>
+        <module>infrastructure/repository</module>
+        <module>reports/jacoco-report-aggregate</module>
     </modules>
 
     <dependencies>
@@ -58,7 +65,37 @@
         <dependencies>
             <dependency>
                 <groupId>io.juancrrn</groupId>
+                <artifactId>balancer-core-application</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.juancrrn</groupId>
+                <artifactId>balancer-core-boot</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.juancrrn</groupId>
+                <artifactId>balancer-core-database</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.juancrrn</groupId>
                 <artifactId>balancer-core-domain</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.juancrrn</groupId>
+                <artifactId>balancer-core-event-listeners</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.juancrrn</groupId>
+                <artifactId>balancer-core-repository</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.juancrrn</groupId>
+                <artifactId>balancer-core-rest-server</artifactId>
                 <version>${project.version}</version>
             </dependency>
         </dependencies>
