@@ -1,6 +1,7 @@
 package io.juancrrn.balancercore.domain.repositories
 
 import io.juancrrn.balancercore.domain.entities.Expense
+import io.juancrrn.balancercore.domain.entities.ExpenseId
 import io.juancrrn.balancercore.domain.valueobjects.UserId
 
 /**
@@ -14,6 +15,14 @@ interface ExpenseRepository {
      * @param expense The expense to save.
      */
     suspend fun save(expense: Expense)
+
+    /**
+     * Finds an expense.
+     *
+     * @param id The expense's identifier.
+     * @return The expense, or null if not found.
+     */
+    suspend fun find(id: ExpenseId): Expense?
 
     /**
      * Finds all the expenses of a user.

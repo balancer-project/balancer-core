@@ -38,8 +38,8 @@ class OneTimeExpense(
     override val amountType: ExpenseAmountType,
     override val paymentMethod: ExpensePaymentMethod,
     override val hiddenInPlans: Boolean,
-    val paymentId: ExpensePaymentId,
+    val paymentId: ExpensePaymentId?,
     override val createdAt: Instant,
     override val updatedAt: Instant,
-    override val deletedAt: Instant?,
+    override val deletedAt: Instant? = null,
 ) : Expense

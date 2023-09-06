@@ -11,6 +11,9 @@ data class RecurringExpenseFrequency(
     val parameter: Int?,
 ) {
 
+    /**
+     * The type of frequency of a recurring expense.
+     */
     enum class RecurringExpenseFrequencyType {
 
         MONTHLY_EXACT_DAY_OF_MONTH,

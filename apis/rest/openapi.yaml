@@ -1,0 +1,248 @@
+openapi: 3.0.3
+info:
+  title: Balancer Core
+  version: 0.0.1
+tags:
+  - name: Expenses
+paths:
+  /v1/users/{userId}/expenses:
+    post:
+      operationId: registerExpense
+      tags:
+        - Expenses
+      summary: Registers an expense
+      description: >-
+        Properties preceded with `oneTime` or `recurring` should be filled according to the expense type.
+        When registering a one-time expense, fill the `oneTimeExpenseStatus` and `paymentId` fields.
+        When registering a recurring expense, fill the `recurringExpenseStatus`, `frequency`, `firstPaymentDate`, `lastPaymentDate` and `paymentsIds` fields.
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: Identifier of the user who is registering the expense.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  $ref: '#/components/schemas/ExpenseType'
+                oneTimeExpenseStatus:
+                  $ref: '#/components/schemas/OneTimeExpenseStatus'
+                recurringExpenseStatus:
+                  $ref: '#/components/schemas/RecurringExpenseStatus'
+                category:
+                  $ref: '#/components/schemas/ExpenseCategory'
+                recipientId:
+                  type: string
+                  format: uuid
+                  description: Recipient identifier.
+                concept:
+                  type: string
+                  description: Concept.
+                comments:
+                  type: string
+                  description: Comments.
+                amount:
+                  type: number
+                  format: float
+                  description: Amount.
+                amountType:
+                  $ref: '#/components/schemas/ExpenseAmountType'
+                paymentMethod:
+                  $ref: '#/components/schemas/ExpensePaymentMethod'
+                frequency:
+                  $ref: '#/components/schemas/RecurringExpenseFrequency'
+                firstPaymentDate:
+                  type: string
+                  format: date
+                  description: Date of the first payment. Only for recurring expenses.
+                lastPaymentDate:
+                  type: string
+                  format: date
+                  description: Date of the last payment. Only for recurring expenses.
+                hiddenInPlans:
+                  type: boolean
+                  description: Whether the expense is hidden in plans.
+                paymentId:
+                  type: string
+                  format: uuid
+                  description: Identifier of the payment of a one-time expense, if it exists. Only for one-time expenses.
+                paymentsIds:
+                  type: array
+                  description: List of identifiers of the payments associated to a recurring expense. Only for recurring expenses.
+                  items:
+                    type: string
+                    format: uuid
+      responses:
+        '200':
+          $ref: '#/components/responses/EntityIdResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '422':
+          $ref: '#/components/responses/UnprocessableEntity'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
+components:
+  schemas:
+    Error:
+      type: object
+      description: A Problem Details Object
+      properties:
+        code:
+          type: string
+          description: Error code
+        description:
+          type: string
+          description: >-
+            A human-readable explanation specific to this occurrence of the
+            problem
+    ExpenseType:
+      type: string
+      description: Type of an expense
+      enum:
+        - one_time
+        - recurring
+    ExpenseCategory:
+      type: string
+      description: The category of an expense.
+      enum:
+        - transfer_out
+        - loan_payments
+        - bank_fees
+        - entertainment
+        - food_and_drink
+        - general_merchandise
+        - home_improvement
+        - medical
+        - personal_care
+        - general_services
+        - government_and_non_profit
+        - transportation
+        - travel
+        - rent_and_utilities
+        - other
+    ExpenseAmountType:
+      type: string
+      description: The type of amount of an expense.
+      enum:
+        - fixed
+        - estimated
+    ExpensePaymentMethod:
+      type: string
+      description: The payment method used to pay for an expense.
+      enum:
+        - cash
+        - bank_card
+        - direct_debit
+    OneTimeExpenseStatus:
+      type: string
+      description: The status of a one-time expense.
+      enum:
+        - pending
+        - done
+    RecurringExpenseFrequency:
+      type: object
+      description: The frequency of a recurring expense. Only for recurring expenses.
+      properties:
+        type:
+          $ref: '#/components/schemas/RecurringExpenseFrequencyType'
+        parameter:
+          type: integer
+          description: The parameter of the frequency, which will be interpreted differently based on the type.
+    RecurringExpenseFrequencyType:
+      type: string
+      description: The type of frequency of a recurring expense. Only for recurring expenses.
+      enum:
+        - monthly_exact_day_of_month
+        - monthly_last_day_of_month
+        - weekly_exact_day_of_week
+        - unknown
+    RecurringExpenseStatus:
+      type: string
+      description: The status of a recurring expense.
+      enum:
+        - active
+        - done
+  responses:
+    BadRequest:
+      description: Bad request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Conflict:
+      description: Conflict
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnprocessableEntity:
+      description: Unprocessable entity
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnexpectedError:
+      description: Unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    EntityIdResponse:
+      description: A response containing the identifier of an entity.
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+                format: uuid
+                description: Identifier of the entity.
+                example: 5c3efb6c-c5b8-4992-b4db-1089c2448eef
+

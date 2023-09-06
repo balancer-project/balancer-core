@@ -49,5 +49,5 @@ class RecurringExpense(
     val paymentsIds: List<ExpensePaymentId>,
     override val createdAt: Instant,
     override val updatedAt: Instant,
-    override val deletedAt: Instant?,
+    override val deletedAt: Instant? = null,
 ) : Expense
