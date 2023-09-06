@@ -8,14 +8,14 @@ package io.juancrrn.balancercore.domain.valueobjects
  */
 data class RecurringExpenseFrequency(
     val type: RecurringExpenseFrequencyType,
-    val parameter: Int?
+    val parameter: Int?,
 ) {
 
-     enum class RecurringExpenseFrequencyType {
+    enum class RecurringExpenseFrequencyType {
 
-         MONTHLY_EXACT_DAY_OF_MONTH,
-         MONTHLY_LAST_DAY_OF_MONTH,
-         WEEKLY_EXACT_DAY_OF_WEEK,
-         UNKNOWN,
-     }
+        MONTHLY_EXACT_DAY_OF_MONTH,
+        MONTHLY_LAST_DAY_OF_MONTH,
+        WEEKLY_EXACT_DAY_OF_WEEK,
+        UNKNOWN,
+    }
 }
