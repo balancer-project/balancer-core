@@ -1,9 +1,9 @@
 package io.juancrrn.balancercore.domain.entities
 
-import java.util.*
+import java.util.UUID
 
 data class ExpensePayment(
-    val id: ExpensePaymentId
+    val id: ExpensePaymentId,
 )
 
 typealias ExpensePaymentId = UUID
