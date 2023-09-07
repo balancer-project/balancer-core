@@ -15,6 +15,7 @@ create table one_time_expense (
   amount_type varchar(64) not null,
   payment_method varchar(64) not null,
   hidden_in_plans boolean not null,
+  payment_id uuid null,
   created_at timestamp not null,
   updated_at timestamp not null,
   deleted_at timestamp null
@@ -32,7 +33,7 @@ create table recurring_expense (
   amount_type varchar(64) not null,
   payment_method varchar(64) not null,
   frequency_type varchar(64) not null,
-  frequency_parameter smallint not null,
+  frequency_parameter integer not null,
   first_payment_date date not null,
   last_payment_date date null,
   hidden_in_plans boolean not null,

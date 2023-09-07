@@ -52,3 +52,23 @@ fun ExpenseCategory.toVO(): ExpenseCategoryVO {
         other -> OTHER
     }
 }
+
+fun ExpenseCategoryVO.toModel(): ExpenseCategory {
+    return when (this) {
+        TRANSFER_OUT -> transferOut
+        LOAN_PAYMENTS -> loanPayments
+        BANK_FEES -> bankFees
+        ENTERTAINMENT -> entertainment
+        FOOD_AND_DRINK -> foodAndDrink
+        GENERAL_MERCHANDISE -> generalMerchandise
+        HOME_IMPROVEMENT -> homeImprovement
+        MEDICAL -> medical
+        PERSONAL_CARE -> personalCare
+        GENERAL_SERVICES -> generalServices
+        GOVERNMENT_AND_NON_PROFIT -> governmentAndNonProfit
+        TRANSPORTATION -> transportation
+        TRAVEL -> travel
+        RENT_AND_UTILITIES -> rentAndUtilities
+        OTHER -> other
+    }
+}

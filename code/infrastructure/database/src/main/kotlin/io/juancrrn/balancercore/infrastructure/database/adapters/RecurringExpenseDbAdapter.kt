@@ -1,29 +1,33 @@
 package io.juancrrn.balancercore.infrastructure.database.adapters
 
 import io.juancrrn.balancercore.infrastructure.database.ext.bindNullable
+import io.juancrrn.balancercore.infrastructure.database.models.ExpensePayment
 import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.AMOUNT
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.AMOUNT_TYPE
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.CATEGORY
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.COMMENTS
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.CONCEPT
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.CREATED_AT
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.DELETED_AT
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.FIRST_PAYMENT_DATE
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.FREQUENCY_PARAMETER
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.FREQUENCY_TYPE
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.HIDDEN_IN_PLANS
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.ID
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.LAST_PAYMENT_DATE
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.PAYMENT_METHOD
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.RECIPIENT_ID
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.STATUS
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.TABLE
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.UPDATED_AT
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Field.USER_ID
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.AMOUNT
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.AMOUNT_TYPE
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.CATEGORY
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.COMMENTS
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.CONCEPT
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.CREATED_AT
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.DELETED_AT
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.FIRST_PAYMENT_DATE
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.FREQUENCY_PARAMETER
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.FREQUENCY_TYPE
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.HIDDEN_IN_PLANS
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.ID
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.JOIN_PAYMENT_ID
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.LAST_PAYMENT_DATE
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.PAYMENT_METHOD
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.RECIPIENT_ID
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.STATUS
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.UPDATED_AT
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.USER_ID
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.TABLE
+import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.r2dbc.core.awaitRowsUpdated
 import org.springframework.stereotype.Component
+import java.util.UUID
 
 @Component
 class RecurringExpenseDbAdapter(
@@ -57,6 +61,17 @@ class RecurringExpenseDbAdapter(
 
     suspend fun update(recurringExpense: RecurringExpense) {
         TODO()
+    }
+
+    suspend fun findByUserId(userId: UUID): List<RecurringExpense> {
+        return databaseClient
+            .sql(SELECT_SQL)
+            .bind(USER_ID, userId)
+            .fetch()
+            .all()
+            .collectList()
+            .awaitSingle()
+            .let { RecurringExpense.mapLeftJoin(it) }
     }
 
     companion object {
@@ -101,6 +116,33 @@ class RecurringExpenseDbAdapter(
                 :$UPDATED_AT,
                 :$DELETED_AT
             )
+        """
+
+        private const val SELECT_SQL = """
+            select
+                e.$ID,
+                e.$USER_ID,
+                e.$STATUS,
+                e.$CATEGORY,
+                e.$RECIPIENT_ID,
+                e.$CONCEPT,
+                e.$COMMENTS,
+                e.$AMOUNT,
+                e.$AMOUNT_TYPE,
+                e.$PAYMENT_METHOD,
+                e.$FREQUENCY_TYPE,
+                e.$FREQUENCY_PARAMETER,
+                e.$FIRST_PAYMENT_DATE,
+                e.$LAST_PAYMENT_DATE,
+                e.$HIDDEN_IN_PLANS,
+                e.$CREATED_AT,
+                e.$UPDATED_AT,
+                e.$DELETED_AT,
+                p.${ExpensePayment.ID} as $JOIN_PAYMENT_ID
+            from $TABLE as e
+            left join ${ExpensePayment.TABLE} as p
+                on p.${ExpensePayment.EXPENSE_ID} = e.$ID
+            where $USER_ID = :$USER_ID
         """
     }
 }

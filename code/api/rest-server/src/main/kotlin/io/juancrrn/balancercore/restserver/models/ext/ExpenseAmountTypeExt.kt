@@ -13,3 +13,10 @@ fun ExpenseAmountType.toVO(): ExpenseAmountTypeVO {
         estimated -> ESTIMATED
     }
 }
+
+fun ExpenseAmountTypeVO.toModel(): ExpenseAmountType {
+    return when (this) {
+        FIXED -> fixed
+        ESTIMATED -> estimated
+    }
+}

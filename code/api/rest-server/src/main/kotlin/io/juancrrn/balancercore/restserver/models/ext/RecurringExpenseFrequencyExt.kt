@@ -11,6 +11,7 @@ import io.juancrrn.balancercore.restserver.api.models.RecurringExpenseFrequencyT
 import io.juancrrn.balancercore.restserver.api.models.RecurringExpenseFrequencyType.monthlyLastDayOfMonth
 import io.juancrrn.balancercore.restserver.api.models.RecurringExpenseFrequencyType.unknown
 import io.juancrrn.balancercore.restserver.api.models.RecurringExpenseFrequencyType.weeklyExactDayOfWeek
+import io.juancrrn.balancercore.domain.valueobjects.RecurringExpenseFrequency as RecurringExpenseFrequencyVO
 import io.juancrrn.balancercore.domain.valueobjects.RecurringExpenseFrequency.RecurringExpenseFrequencyType as RecurringExpenseFrequencyTypeVO
 
 fun RecurringExpenseFrequencyType.toVO(): RecurringExpenseFrequencyTypeVO {
@@ -25,6 +26,22 @@ fun RecurringExpenseFrequencyType.toVO(): RecurringExpenseFrequencyTypeVO {
 fun RecurringExpenseFrequency.toRegisterExpenseCommandVO(): RegisterExpenseCommand.RecurringExpenseFrequency {
     return RegisterExpenseCommand.RecurringExpenseFrequency(
         type?.toVO(),
+        parameter,
+    )
+}
+
+fun RecurringExpenseFrequencyTypeVO.toModel(): RecurringExpenseFrequencyType {
+    return when (this) {
+        MONTHLY_EXACT_DAY_OF_MONTH -> monthlyExactDayOfMonth
+        MONTHLY_LAST_DAY_OF_MONTH -> monthlyLastDayOfMonth
+        WEEKLY_EXACT_DAY_OF_WEEK -> weeklyExactDayOfWeek
+        UNKNOWN -> unknown
+    }
+}
+
+fun RecurringExpenseFrequencyVO.toModel(): RecurringExpenseFrequency {
+    return RecurringExpenseFrequency(
+        type.toModel(),
         parameter,
     )
 }

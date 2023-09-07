@@ -13,3 +13,10 @@ fun RecurringExpenseStatus.toVO(): RecurringExpenseStatusVO {
         done -> DONE
     }
 }
+
+fun RecurringExpenseStatusVO.toModel(): RecurringExpenseStatus {
+    return when (this) {
+        ACTIVE -> active
+        DONE -> done
+    }
+}

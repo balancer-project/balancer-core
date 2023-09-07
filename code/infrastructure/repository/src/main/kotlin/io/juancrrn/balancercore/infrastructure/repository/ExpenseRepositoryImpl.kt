@@ -8,7 +8,11 @@ import io.juancrrn.balancercore.domain.repositories.ExpenseRepository
 import io.juancrrn.balancercore.domain.valueobjects.UserId
 import io.juancrrn.balancercore.infrastructure.database.adapters.OneTimeExpenseDbAdapter
 import io.juancrrn.balancercore.infrastructure.database.adapters.RecurringExpenseDbAdapter
+import io.juancrrn.balancercore.infrastructure.repository.database.models.toEntity
 import io.juancrrn.balancercore.infrastructure.repository.database.models.toModel
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import org.springframework.stereotype.Repository
 
 @Repository
@@ -38,7 +42,10 @@ class ExpenseRepositoryImpl(
         TODO("Not yet implemented")
     }
 
-    override suspend fun find(userId: UserId): List<Expense> {
-        TODO("Not yet implemented")
+    override suspend fun findAll(userId: UserId): List<Expense> = coroutineScope {
+        return@coroutineScope listOf(
+            async { oneTimeExpenseDbAdapter.findByUserId(userId.id).map { it.toEntity() } },
+            async { recurringExpenseDbAdapter.findByUserId(userId.id).map { it.toEntity() } },
+        ).awaitAll().flatten()
     }
 }

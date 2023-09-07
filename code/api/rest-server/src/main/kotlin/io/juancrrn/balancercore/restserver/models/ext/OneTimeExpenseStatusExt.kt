@@ -13,3 +13,10 @@ fun OneTimeExpenseStatus.toVO(): OneTimeExpenseStatusVO {
         done -> DONE
     }
 }
+
+fun OneTimeExpenseStatusVO.toModel(): OneTimeExpenseStatus {
+    return when (this) {
+        PENDING -> pending
+        DONE -> done
+    }
+}

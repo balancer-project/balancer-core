@@ -30,5 +30,5 @@ interface ExpenseRepository {
      * @param userId The user's identifier.
      * @return A list of expenses.
      */
-    suspend fun find(userId: UserId): List<Expense>
+    suspend fun findAll(userId: UserId): List<Expense>
 }

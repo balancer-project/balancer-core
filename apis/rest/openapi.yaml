@@ -6,6 +6,32 @@ tags:
   - name: Expenses
 paths:
   /v1/users/{userId}/expenses:
+    parameters:
+      - in: path
+        name: userId
+        schema:
+          type: string
+          format: uuid
+        required: true
+        description: Identifier of the user who owns the expense.
+    get:
+      operationId: findExpenses
+      tags:
+        - Expenses
+      summary: Finds all expenses owned by the user
+      responses:
+        '200':
+          description: List of expenses.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Expense'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        default:
+          $ref: '#/components/responses/UnexpectedError'
     post:
       operationId: registerExpense
       tags:
@@ -15,14 +41,6 @@ paths:
         Properties preceded with `oneTime` or `recurring` should be filled according to the expense type.
         When registering a one-time expense, fill the `oneTimeExpenseStatus` and `paymentId` fields.
         When registering a recurring expense, fill the `recurringExpenseStatus`, `frequency`, `firstPaymentDate`, `lastPaymentDate` and `paymentsIds` fields.
-      parameters:
-        - in: path
-          name: userId
-          schema:
-            type: string
-            format: uuid
-          required: true
-          description: Identifier of the user who is registering the expense.
       requestBody:
         required: true
         content:
@@ -102,6 +120,83 @@ components:
           description: >-
             A human-readable explanation specific to this occurrence of the
             problem
+    Expense:
+      type: object
+      description: An expense
+      required:
+        - id
+        - type
+        - recipientId
+        - concept
+        - comments
+        - amount
+        - amountType
+        - paymentMethod
+        - hiddenInPlans
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier.
+        type:
+          $ref: '#/components/schemas/ExpenseType'
+        oneTimeExpenseStatus:
+          $ref: '#/components/schemas/OneTimeExpenseStatus'
+        recurringExpenseStatus:
+          $ref: '#/components/schemas/RecurringExpenseStatus'
+        category:
+          $ref: '#/components/schemas/ExpenseCategory'
+        recipientId:
+          type: string
+          format: uuid
+          description: Recipient identifier.
+        concept:
+          type: string
+          description: Concept.
+        comments:
+          type: string
+          description: Comments.
+        amount:
+          type: number
+          format: float
+          description: Amount.
+        amountType:
+          $ref: '#/components/schemas/ExpenseAmountType'
+        paymentMethod:
+          $ref: '#/components/schemas/ExpensePaymentMethod'
+        frequency:
+          $ref: '#/components/schemas/RecurringExpenseFrequency'
+        firstPaymentDate:
+          type: string
+          format: date
+          description: Date of the first payment. Only for recurring expenses.
+        lastPaymentDate:
+          type: string
+          format: date
+          description: Date of the last payment. Only for recurring expenses.
+        hiddenInPlans:
+          type: boolean
+          description: Whether the expense is hidden in plans.
+        paymentId:
+          type: string
+          format: uuid
+          description: Identifier of the payment of a one-time expense, if it exists. Only for one-time expenses.
+        paymentsIds:
+          type: array
+          description: List of identifiers of the payments associated to a recurring expense. Only for recurring expenses.
+          items:
+            type: string
+            format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          description: Date and time when the expense was registered.
+        updatedAt:
+          type: string
+          format: date-time
+          description: Date and time when the expense was last updated.
     ExpenseType:
       type: string
       description: Type of an expense

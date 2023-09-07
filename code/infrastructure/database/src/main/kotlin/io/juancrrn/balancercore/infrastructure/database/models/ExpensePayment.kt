@@ -10,4 +10,15 @@ data class ExpensePayment(
     val expenseId: UUID,
     val finalAmount: Float,
     val postDate: LocalDate,
-)
+) {
+
+    companion object Field {
+
+        const val TABLE = "expense_payment"
+
+        const val ID = "id"
+        const val EXPENSE_ID = "expense_id"
+        const val FINAL_AMOUNT = "final_amount"
+        const val POST_DATE = "post_date"
+    }
+}

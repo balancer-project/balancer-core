@@ -16,3 +16,11 @@ fun ExpensePaymentMethod.toVO(): ExpensePaymentMethodVO {
         directDebit -> DIRECT_DEBIT
     }
 }
+
+fun ExpensePaymentMethodVO.toModel(): ExpensePaymentMethod {
+    return when (this) {
+        CASH -> cash
+        BANK_CARD -> bankCard
+        DIRECT_DEBIT -> directDebit
+    }
+}
