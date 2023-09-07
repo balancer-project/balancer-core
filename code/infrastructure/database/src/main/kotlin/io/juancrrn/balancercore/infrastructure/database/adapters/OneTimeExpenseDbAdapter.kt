@@ -18,6 +18,7 @@ import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense.Co
 import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense.Companion.Field.UPDATED_AT
 import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense.Companion.Field.USER_ID
 import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense.Companion.TABLE
+import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.r2dbc.core.awaitRowsUpdated
@@ -55,9 +56,18 @@ class OneTimeExpenseDbAdapter(
         TODO()
     }
 
+    suspend fun findById(id: UUID): OneTimeExpense? {
+        return databaseClient
+            .sql(SELECT_SQL + WHERE_ID_SQL)
+            .bind(ID, id)
+            .map { row, _ -> OneTimeExpense.map(row) }
+            .one()
+            .awaitSingle()
+    }
+
     suspend fun findByUserId(userId: UUID): List<OneTimeExpense> {
         return databaseClient
-            .sql(SELECT_SQL)
+            .sql(SELECT_SQL + WHERE_USER_ID_SQL)
             .bind(USER_ID, userId)
             .map { row, _ -> OneTimeExpense.map(row) }
             .all()
@@ -121,6 +131,13 @@ class OneTimeExpenseDbAdapter(
                 $UPDATED_AT,
                 $DELETED_AT
             from $TABLE
+        """
+
+        private const val WHERE_ID_SQL = """
+            where $ID = :$ID
+        """
+
+        private const val WHERE_USER_ID_SQL = """
             where $USER_ID = :$USER_ID
         """
     }

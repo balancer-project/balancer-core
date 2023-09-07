@@ -37,9 +37,11 @@ class ExpenseRepositoryImpl(
         }
     }
 
-    override suspend fun find(id: ExpenseId): Expense? {
-        return null
-        TODO("Not yet implemented")
+    override suspend fun find(id: ExpenseId): Expense? = coroutineScope {
+        return@coroutineScope listOf(
+            async { oneTimeExpenseDbAdapter.findById(id)?.toEntity() },
+            async { recurringExpenseDbAdapter.findById(id)?.toEntity() },
+        ).awaitAll().firstOrNull()
     }
 
     override suspend fun findAll(userId: UserId): List<Expense> = coroutineScope {

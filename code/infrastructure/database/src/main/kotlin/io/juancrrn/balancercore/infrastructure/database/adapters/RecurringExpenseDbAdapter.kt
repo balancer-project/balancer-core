@@ -2,6 +2,7 @@ package io.juancrrn.balancercore.infrastructure.database.adapters
 
 import io.juancrrn.balancercore.infrastructure.database.ext.bindNullable
 import io.juancrrn.balancercore.infrastructure.database.models.ExpensePayment
+import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense
 import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense
 import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.AMOUNT
 import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.AMOUNT_TYPE
@@ -63,9 +64,21 @@ class RecurringExpenseDbAdapter(
         TODO()
     }
 
+    suspend fun findById(id: UUID): RecurringExpense? {
+        return databaseClient
+            .sql(SELECT_SQL + WHERE_ID_SQL)
+            .bind(ID, id)
+            .fetch()
+            .all()
+            .collectList()
+            .awaitSingle()
+            .let { RecurringExpense.mapLeftJoin(it) }
+            .firstOrNull()
+    }
+
     suspend fun findByUserId(userId: UUID): List<RecurringExpense> {
         return databaseClient
-            .sql(SELECT_SQL)
+            .sql(SELECT_SQL + WHERE_USER_ID_SQL)
             .bind(USER_ID, userId)
             .fetch()
             .all()
@@ -142,7 +155,14 @@ class RecurringExpenseDbAdapter(
             from $TABLE as e
             left join ${ExpensePayment.TABLE} as p
                 on p.${ExpensePayment.EXPENSE_ID} = e.$ID
-            where $USER_ID = :$USER_ID
+        """
+
+        private const val WHERE_ID_SQL = """
+            where e.$ID = :$ID
+        """
+
+        private const val WHERE_USER_ID_SQL = """
+            where e.$USER_ID = :$USER_ID
         """
     }
 }
