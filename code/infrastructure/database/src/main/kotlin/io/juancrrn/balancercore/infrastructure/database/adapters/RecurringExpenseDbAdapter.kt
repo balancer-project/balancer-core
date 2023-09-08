@@ -2,7 +2,6 @@ package io.juancrrn.balancercore.infrastructure.database.adapters
 
 import io.juancrrn.balancercore.infrastructure.database.ext.bindNullable
 import io.juancrrn.balancercore.infrastructure.database.models.ExpensePayment
-import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense
 import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense
 import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.AMOUNT
 import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense.Companion.Field.AMOUNT_TYPE

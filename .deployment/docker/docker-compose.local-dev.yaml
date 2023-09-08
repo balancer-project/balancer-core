@@ -5,7 +5,7 @@ services:
     hostname: db
     image: postgres:15-alpine
     ports:
-      - '49152:5432'
+      - '49153:5432'
     environment:
       - POSTGRES_USER=core
       - POSTGRES_PASSWORD=local-dev
@@ -14,8 +14,8 @@ services:
     hostname: wiremock
     image: wiremock/wiremock:2.35.0-alpine
     ports:
-      - '49153:8443'
-      - '49154:8444'
+      - '49154:8443'
+      - '49155:8444'
     volumes:
       - ../../code/boot/src/test/resources/wiremock/:/home/wiremock
     command:

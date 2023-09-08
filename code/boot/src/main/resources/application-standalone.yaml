@@ -1,10 +1,13 @@
 spring:
   r2dbc:
-    url: r2dbc:postgresql://localhost:49152/core-db
+    url: r2dbc:postgresql://localhost:49153/core-db
     username: core
     password: local-dev
   liquibase:
     change-log: classpath:database/changelog/changelog-master.yaml
-    url: jdbc:postgresql://localhost:49152/core-db
+    url: jdbc:postgresql://localhost:49153/core-db
     user: core
     password: local-dev
+
+server:
+  port: 49152

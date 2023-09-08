@@ -18,7 +18,6 @@ import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense.Co
 import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense.Companion.Field.UPDATED_AT
 import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense.Companion.Field.USER_ID
 import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense.Companion.TABLE
-import io.juancrrn.balancercore.infrastructure.database.models.RecurringExpense
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.r2dbc.core.awaitRowsUpdated
