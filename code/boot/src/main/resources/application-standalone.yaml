@@ -11,3 +11,7 @@ spring:
 
 server:
   port: 49152
+
+rest-server:
+  cors:
+    allowed-origins: http://localhost:3000

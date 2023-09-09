@@ -19,6 +19,7 @@ import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense.Co
 import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense.Companion.Field.USER_ID
 import io.juancrrn.balancercore.infrastructure.database.models.OneTimeExpense.Companion.TABLE
 import kotlinx.coroutines.reactor.awaitSingle
+import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.r2dbc.core.awaitRowsUpdated
 import org.springframework.stereotype.Component
@@ -61,7 +62,7 @@ class OneTimeExpenseDbAdapter(
             .bind(ID, id)
             .map { row, _ -> OneTimeExpense.map(row) }
             .one()
-            .awaitSingle()
+            .awaitSingleOrNull()
     }
 
     suspend fun findByUserId(userId: UUID): List<OneTimeExpense> {

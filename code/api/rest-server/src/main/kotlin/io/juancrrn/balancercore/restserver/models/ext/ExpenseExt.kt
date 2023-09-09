@@ -1,20 +1,20 @@
 package io.juancrrn.balancercore.restserver.models.ext
 
-import io.juancrrn.balancercore.domain.entities.OneTimeExpense
-import io.juancrrn.balancercore.domain.entities.RecurringExpense
-import io.juancrrn.balancercore.restserver.api.models.Expense
+import io.juancrrn.balancercore.application.dtos.EnrichedOneTimeExpense
+import io.juancrrn.balancercore.application.dtos.EnrichedRecurringExpense
+import io.juancrrn.balancercore.restserver.api.models.EnrichedExpense
 import io.juancrrn.balancercore.restserver.api.models.ExpenseType
-import io.juancrrn.balancercore.domain.entities.Expense as ExpenseEntity
+import io.juancrrn.balancercore.application.dtos.EnrichedExpense as EnrichedExpenseEntity
 
-fun ExpenseEntity.toModel(): Expense {
+fun EnrichedExpenseEntity.toModel(): EnrichedExpense {
     return when (this) {
-        is RecurringExpense -> {
-            Expense(
+        is EnrichedRecurringExpense -> {
+            EnrichedExpense(
                 id = id,
                 type = ExpenseType.recurring,
                 recurringExpenseStatus = status.toModel(),
                 category = category.toModel(),
-                recipientId = recipientId,
+                recipient = recipient.toModel(),
                 concept = concept,
                 comments = comments,
                 amount = amount,
@@ -24,26 +24,26 @@ fun ExpenseEntity.toModel(): Expense {
                 firstPaymentDate = firstPaymentDate,
                 lastPaymentDate = lastPaymentDate,
                 hiddenInPlans = hiddenInPlans,
-                paymentsIds = paymentsIds,
+                payments = payments.map { it.toModel() },
                 createdAt = createdAt.toOffsetDateTime(),
                 updatedAt = updatedAt.toOffsetDateTime(),
             )
         }
 
-        is OneTimeExpense -> {
-            Expense(
+        is EnrichedOneTimeExpense -> {
+            EnrichedExpense(
                 id = id,
                 type = ExpenseType.oneTime,
                 oneTimeExpenseStatus = status.toModel(),
                 category = category.toModel(),
-                recipientId = recipientId,
+                recipient = recipient.toModel(),
                 concept = concept,
                 comments = comments,
                 amount = amount,
                 amountType = amountType.toModel(),
                 paymentMethod = paymentMethod.toModel(),
                 hiddenInPlans = hiddenInPlans,
-                paymentId = paymentId,
+                payment = payment?.toModel(),
                 createdAt = createdAt.toOffsetDateTime(),
                 updatedAt = updatedAt.toOffsetDateTime(),
             )

@@ -27,7 +27,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Expense'
+                  $ref: '#/components/schemas/EnrichedExpense'
         '400':
           $ref: '#/components/responses/BadRequest'
         default:
@@ -120,7 +120,7 @@ components:
           description: >-
             A human-readable explanation specific to this occurrence of the
             problem
-    Expense:
+    EnrichedExpense:
       type: object
       description: An expense
       required:
@@ -148,10 +148,8 @@ components:
           $ref: '#/components/schemas/RecurringExpenseStatus'
         category:
           $ref: '#/components/schemas/ExpenseCategory'
-        recipientId:
-          type: string
-          format: uuid
-          description: Recipient identifier.
+        recipient:
+          $ref: '#/components/schemas/ExpenseRecipient'
         concept:
           type: string
           description: Concept.
@@ -179,16 +177,13 @@ components:
         hiddenInPlans:
           type: boolean
           description: Whether the expense is hidden in plans.
-        paymentId:
-          type: string
-          format: uuid
-          description: Identifier of the payment of a one-time expense, if it exists. Only for one-time expenses.
-        paymentsIds:
+        payment:
+          $ref: '#/components/schemas/ExpensePayment'
+        payments:
           type: array
-          description: List of identifiers of the payments associated to a recurring expense. Only for recurring expenses.
+          description: List of the payments associated to a recurring expense. Only for recurring expenses.
           items:
-            type: string
-            format: uuid
+            $ref: '#/components/schemas/ExpensePayment'
         createdAt:
           type: string
           format: date-time
@@ -222,12 +217,51 @@ components:
         - travel
         - rent_and_utilities
         - other
+    ExpenseRecipient:
+      type: object
+      description: The recipient of an expense.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identifier of the expense recipient.
+        name:
+          type: string
+          description: Name of the expense recipient.
     ExpenseAmountType:
       type: string
       description: The type of amount of an expense.
       enum:
         - fixed
         - estimated
+    ExpensePayment:
+      type: object
+      description: A payment of an expense.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identifier of the payment.
+        status:
+          $ref: '#/components/schemas/ExpensePaymentStatus'
+        amount:
+          type: number
+          format: float
+          description: Amount of the payment.
+        authorizationDate:
+          type: string
+          format: date
+          description: Date of the authorization of the payment.
+        postDate:
+          type: string
+          format: date
+          description: Date when the payment was posted.
+    ExpensePaymentStatus:
+      type: string
+      description: The status of a payment of an expense.
+      enum:
+        - pending
+        - posted
     ExpensePaymentMethod:
       type: string
       description: The payment method used to pay for an expense.
@@ -340,4 +374,3 @@ components:
                 format: uuid
                 description: Identifier of the entity.
                 example: 5c3efb6c-c5b8-4992-b4db-1089c2448eef
-

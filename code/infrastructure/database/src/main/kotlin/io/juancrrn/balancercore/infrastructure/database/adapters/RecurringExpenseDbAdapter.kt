@@ -150,10 +150,10 @@ class RecurringExpenseDbAdapter(
                 e.$CREATED_AT,
                 e.$UPDATED_AT,
                 e.$DELETED_AT,
-                p.${ExpensePayment.ID} as $JOIN_PAYMENT_ID
+                p.${ExpensePayment.Companion.Field.ID} as $JOIN_PAYMENT_ID
             from $TABLE as e
             left join ${ExpensePayment.TABLE} as p
-                on p.${ExpensePayment.EXPENSE_ID} = e.$ID
+                on p.${ExpensePayment.Companion.Field.EXPENSE_ID} = e.$ID
         """
 
         private const val WHERE_ID_SQL = """

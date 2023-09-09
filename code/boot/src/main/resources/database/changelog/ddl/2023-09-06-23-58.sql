@@ -42,11 +42,18 @@ create table recurring_expense (
   deleted_at timestamp null
 );
 
+create table expense_recipient (
+  id uuid primary key,
+  name varchar(128) not null
+);
+
 create table expense_payment (
   id uuid primary key,
   expense_id uuid not null,
-  final_amount numeric not null,
-  post_date date not null
+  status varchar(64) not null,
+  amount numeric not null,
+  authorization_date date null,
+  post_date date null
 );
 
 create table expense_payment_origin_transaction (
