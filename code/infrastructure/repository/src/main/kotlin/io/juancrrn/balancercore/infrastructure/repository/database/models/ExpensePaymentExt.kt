@@ -8,10 +8,23 @@ import io.juancrrn.balancercore.domain.entities.ExpensePayment as ExpensePayment
 fun ExpensePayment.toEntity(): ExpensePaymentEntity {
     return ExpensePaymentEntity(
         id = id,
+        expenseId = expenseId,
         status = ExpensePaymentStatus.valueOf(status),
         amount = amount,
+        date = date,
         authorizationDate = authorizationDate,
-        postDate = postDate,
         originTransactionsIds = originTransactionsIds.map { TransactionId(it) },
+    )
+}
+
+fun ExpensePaymentEntity.toModel(): ExpensePayment {
+    return ExpensePayment(
+        id = id,
+        expenseId = expenseId,
+        status = status.name,
+        amount = amount,
+        date = date,
+        authorizationDate = authorizationDate,
+        originTransactionsIds = originTransactionsIds.map { it.id },
     )
 }

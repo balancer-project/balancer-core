@@ -9,6 +9,13 @@ import io.juancrrn.balancercore.domain.entities.ExpensePaymentId
 interface ExpensePaymentRepository {
 
     /**
+     * Saves a payment.
+     *
+     * @param expensePayment The payment to save.
+     */
+    suspend fun save(expensePayment: ExpensePayment)
+
+    /**
      * Finds a payment by its id.
      *
      * @param id The id of the payment.

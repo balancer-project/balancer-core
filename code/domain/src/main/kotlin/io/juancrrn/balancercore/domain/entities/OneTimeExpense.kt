@@ -26,7 +26,7 @@ import java.time.Instant
  * @property updatedAt Last update date.
  * @property deletedAt Deletion date.
  */
-class OneTimeExpense(
+data class OneTimeExpense(
     override val id: ExpenseId,
     override val userId: UserId,
     val status: OneTimeExpenseStatus,

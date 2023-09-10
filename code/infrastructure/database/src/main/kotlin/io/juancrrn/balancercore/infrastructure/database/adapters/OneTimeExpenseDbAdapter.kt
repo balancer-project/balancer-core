@@ -53,7 +53,25 @@ class OneTimeExpenseDbAdapter(
     }
 
     suspend fun update(oneTimeExpense: OneTimeExpense) {
-        TODO()
+        databaseClient
+            .sql(UPDATE_SQL)
+            .bind(ID, oneTimeExpense.id)
+            .bind(USER_ID, oneTimeExpense.userId)
+            .bind(STATUS, oneTimeExpense.status)
+            .bind(CATEGORY, oneTimeExpense.category)
+            .bind(RECIPIENT_ID, oneTimeExpense.recipientId)
+            .bind(CONCEPT, oneTimeExpense.concept)
+            .bind(COMMENTS, oneTimeExpense.comments)
+            .bind(AMOUNT, oneTimeExpense.amount)
+            .bind(AMOUNT_TYPE, oneTimeExpense.amountType)
+            .bind(PAYMENT_METHOD, oneTimeExpense.paymentMethod)
+            .bind(HIDDEN_IN_PLANS, oneTimeExpense.hiddenInPlans)
+            .bindNullable(PAYMENT_ID, oneTimeExpense.paymentId)
+            .bind(CREATED_AT, oneTimeExpense.createdAt)
+            .bind(UPDATED_AT, oneTimeExpense.updatedAt)
+            .bindNullable(DELETED_AT, oneTimeExpense.deletedAt)
+            .fetch()
+            .awaitRowsUpdated()
     }
 
     suspend fun findById(id: UUID): OneTimeExpense? {
@@ -111,6 +129,25 @@ class OneTimeExpenseDbAdapter(
                 :$UPDATED_AT,
                 :$DELETED_AT
             )
+        """
+
+        private const val UPDATE_SQL = """
+            update $TABLE set
+                $USER_ID = :$USER_ID,
+                $STATUS = :$STATUS,
+                $CATEGORY = :$CATEGORY,
+                $RECIPIENT_ID = :$RECIPIENT_ID,
+                $CONCEPT = :$CONCEPT,
+                $COMMENTS = :$COMMENTS,
+                $AMOUNT = :$AMOUNT,
+                $AMOUNT_TYPE = :$AMOUNT_TYPE,
+                $PAYMENT_METHOD = :$PAYMENT_METHOD,
+                $HIDDEN_IN_PLANS = :$HIDDEN_IN_PLANS,
+                $PAYMENT_ID = :$PAYMENT_ID,
+                $CREATED_AT = :$CREATED_AT,
+                $UPDATED_AT = :$UPDATED_AT,
+                $DELETED_AT = :$DELETED_AT
+            where $ID = :$ID
         """
 
         private const val SELECT_SQL = """

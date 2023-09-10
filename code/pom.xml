@@ -30,10 +30,14 @@
         <r2dbc-postgresql.version>1.0.2.RELEASE</r2dbc-postgresql.version>
         <liquibase.version>4.23.1</liquibase.version>
         <wiremock.version>3.0.0-beta-10</wiremock.version>
+        <mockk.version>1.13.7</mockk.version>
+        <apache-commons.version>1.10.0</apache-commons.version>
+        <spring-cloud-stream.version>4.0.4</spring-cloud-stream.version>
+        <jackson-module-kotlin.version>2.15.2</jackson-module-kotlin.version>
     </properties>
 
     <modules>
-        <module>api/event-listeners</module>
+        <module>api/event-subscribers</module>
         <module>api/rest-server</module>
         <module>application</module>
         <module>boot</module>
@@ -92,7 +96,7 @@
             </dependency>
             <dependency>
                 <groupId>io.juancrrn</groupId>
-                <artifactId>balancer-core-event-listeners</artifactId>
+                <artifactId>balancer-core-event-subscribers</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -139,9 +143,43 @@
             </dependency>
 
             <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-text</artifactId>
+                <version>${apache-commons.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.module</groupId>
+                <artifactId>jackson-module-kotlin</artifactId>
+                <version>${jackson-module-kotlin.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream</artifactId>
+                <version>${spring-cloud-stream.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+                <version>${spring-cloud-stream.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-stream-test-binder</artifactId>
+                <version>${spring-cloud-stream.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>com.github.tomakehurst</groupId>
                 <artifactId>wiremock</artifactId>
                 <version>${wiremock.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.mockk</groupId>
+                <artifactId>mockk-jvm</artifactId>
+                <version>${mockk.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

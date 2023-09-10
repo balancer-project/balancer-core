@@ -8,7 +8,7 @@ fun ExpensePaymentEntity.toModel(): ExpensePayment {
         id = id,
         status = status.toModel(),
         amount = amount,
+        date = date,
         authorizationDate = authorizationDate,
-        postDate = postDate,
     )
 }

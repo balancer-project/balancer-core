@@ -8,6 +8,27 @@ spring:
     url: jdbc:postgresql://localhost:49153/core-db
     user: core
     password: local-dev
+  rabbitmq:
+    host: localhost
+    port: 49166
+  cloud:
+    function:
+      definition: transactionAdded
+    stream:
+      default-binder: rabbit
+      bindings:
+        transactionAdded-in-0:
+          content-type: application/json
+          group: local.balancer_core.transaction_added.in # Queue name
+          consumer:
+            max-attempts: 3
+      rabbit:
+        default:
+          consumer:
+            bindQueue: false
+            declareExchange: false
+            queueNameGroupOnly: true
+            republishToDlq: false
 
 server:
   port: 49152

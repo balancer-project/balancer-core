@@ -248,14 +248,14 @@ components:
           type: number
           format: float
           description: Amount of the payment.
+        date:
+          type: string
+          format: date
+          description: For pending transactions, the date when the transaction occurred; for posted transactions, the date that the transaction posted.
         authorizationDate:
           type: string
           format: date
-          description: Date of the authorization of the payment.
-        postDate:
-          type: string
-          format: date
-          description: Date when the payment was posted.
+          description: The date when the transaction was authorized. For posted transactions, the date field will indicate the posted date, but authorized_date will indicate the day the transaction was authorized by the financial institution.
     ExpensePaymentStatus:
       type: string
       description: The status of a payment of an expense.
