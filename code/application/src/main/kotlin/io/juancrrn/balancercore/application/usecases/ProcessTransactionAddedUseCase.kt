@@ -16,7 +16,7 @@ class ProcessTransactionAddedUseCase(
     override suspend fun dispatch(command: ProcessTransactionAddedCommand) = command.transactionAdded.run {
         try {
             val expense = transactionExpenseResolver.resolve(transaction)
-            transactionExpenseProcessor.process(transaction, expense)
+            transactionExpenseProcessor.processAddedFor(transaction, expense)
         } catch (_: UnableToResolveTransactionExpenseException) {
         }
     }

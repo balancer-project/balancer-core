@@ -36,7 +36,7 @@ data class PreprocessedTransaction(
     fun toExpensePayment(
         paymentId: ExpensePaymentId = ExpensePaymentId.randomUUID(),
         expenseId: ExpenseId,
-        originTransactionsIds: List<TransactionId> = emptyList(),
+        additionalOriginTransactionsIds: List<TransactionId> = emptyList(),
     ): ExpensePayment {
         return ExpensePayment(
             id = paymentId,
@@ -48,7 +48,7 @@ data class PreprocessedTransaction(
             amount = amount.toFloat(),
             date = date,
             authorizationDate = authorizedDate,
-            originTransactionsIds = originTransactionsIds + id,
+            originTransactionsIds = additionalOriginTransactionsIds + id,
         )
     }
 }
