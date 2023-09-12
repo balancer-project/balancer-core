@@ -290,6 +290,7 @@ components:
       enum:
         - monthly_exact_day_of_month
         - monthly_last_day_of_month
+        - monthly_unknown
         - weekly_exact_day_of_week
         - unknown
     RecurringExpenseStatus:

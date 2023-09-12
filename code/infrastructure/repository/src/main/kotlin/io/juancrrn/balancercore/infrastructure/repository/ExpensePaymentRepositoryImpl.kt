@@ -3,6 +3,7 @@ package io.juancrrn.balancercore.infrastructure.repository
 import io.juancrrn.balancercore.domain.entities.ExpensePayment
 import io.juancrrn.balancercore.domain.entities.ExpensePaymentId
 import io.juancrrn.balancercore.domain.repositories.ExpensePaymentRepository
+import io.juancrrn.balancercore.domain.valueobjects.TransactionId
 import io.juancrrn.balancercore.infrastructure.database.adapters.ExpensePaymentDbAdapter
 import io.juancrrn.balancercore.infrastructure.repository.database.models.toEntity
 import io.juancrrn.balancercore.infrastructure.repository.database.models.toModel
@@ -23,5 +24,9 @@ class ExpensePaymentRepositoryImpl(
 
     override suspend fun find(id: ExpensePaymentId): ExpensePayment? {
         return expensePaymentDbAdapter.findById(id)?.toEntity()
+    }
+
+    override suspend fun findByOriginTransactionId(originTransactionId: TransactionId): ExpensePayment? {
+        return expensePaymentDbAdapter.findByOriginTransactionId(originTransactionId.id)?.toEntity()
     }
 }

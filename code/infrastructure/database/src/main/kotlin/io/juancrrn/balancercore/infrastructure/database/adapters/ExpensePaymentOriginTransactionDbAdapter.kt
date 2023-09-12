@@ -3,6 +3,7 @@ package io.juancrrn.balancercore.infrastructure.database.adapters
 import io.juancrrn.balancercore.infrastructure.database.models.ExpensePaymentOriginTransaction
 import io.juancrrn.balancercore.infrastructure.database.models.ExpensePaymentOriginTransaction.Companion.Field.PAYMENT_ID
 import io.juancrrn.balancercore.infrastructure.database.models.ExpensePaymentOriginTransaction.Companion.Field.TRANSACTION_ID
+import kotlinx.coroutines.reactor.awaitSingle
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.data.r2dbc.core.R2dbcEntityTemplate
 import org.springframework.data.relational.core.query.Criteria
@@ -16,10 +17,12 @@ class ExpensePaymentOriginTransactionDbAdapter(
 ) {
 
     suspend fun insert(expensePaymentOriginTransaction: ExpensePaymentOriginTransaction) {
-        entityTemplate.insert(expensePaymentOriginTransaction)
+        entityTemplate
+            .insert(expensePaymentOriginTransaction)
+            .awaitSingle()
     }
 
-    suspend fun updateMultiple(expensePaymentOriginTransactions: List<ExpensePaymentOriginTransaction>) {
+    suspend fun insertMultiple(expensePaymentOriginTransactions: List<ExpensePaymentOriginTransaction>) {
         expensePaymentOriginTransactions
             .filter { findByPaymentIdAndTransactionId(it.paymentId, it.transactionId) == null }
             .forEach { insert(it) }

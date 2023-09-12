@@ -38,7 +38,7 @@ class ExpensePaymentDbAdapter(
             .rowsUpdated()
             .awaitSingle()
 
-        expensePaymentOriginTransactionDbAdapter.updateMultiple(
+        expensePaymentOriginTransactionDbAdapter.insertMultiple(
             expensePayment.originTransactionsIds.map { ExpensePaymentOriginTransaction(expensePayment.id, it) },
         )
     }
@@ -55,7 +55,7 @@ class ExpensePaymentDbAdapter(
             .rowsUpdated()
             .awaitSingle()
 
-        expensePaymentOriginTransactionDbAdapter.updateMultiple(
+        expensePaymentOriginTransactionDbAdapter.insertMultiple(
             expensePayment.originTransactionsIds.map { ExpensePaymentOriginTransaction(expensePayment.id, it) },
         )
     }
@@ -69,7 +69,19 @@ class ExpensePaymentDbAdapter(
             .collectList()
             .awaitSingle()
             .let { ExpensePayment.mapLeftJoin(it) }
-            .firstOrNull()
+            .singleOrNull()
+    }
+
+    suspend fun findByOriginTransactionId(originTransactionId: String): ExpensePayment? {
+        return databaseClient
+            .sql(SELECT_SQL + WHERE_ORIGIN_TRANSACTION_ID_SQL)
+            .bind(JOIN_ORIGIN_TRANSACTION_ID, originTransactionId)
+            .fetch()
+            .all()
+            .collectList()
+            .awaitSingle()
+            .let { ExpensePayment.mapLeftJoin(it) }
+            .singleOrNull()
     }
 
     companion object {
@@ -117,6 +129,14 @@ class ExpensePaymentDbAdapter(
 
         private const val WHERE_ID_SQL = """
             where p.$ID = :$ID
+        """
+
+        private const val WHERE_ORIGIN_TRANSACTION_ID_SQL = """
+            where p.$ID in (
+                select $JOIN_PAYMENT_ID
+                from $EXPENSE_PAYMENT_ORIGIN_TRANSACTION_TABLE
+                where transaction_id = :$JOIN_ORIGIN_TRANSACTION_ID
+            )
         """
     }
 }

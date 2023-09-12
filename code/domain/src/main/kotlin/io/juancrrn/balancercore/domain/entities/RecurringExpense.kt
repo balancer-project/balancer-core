@@ -31,7 +31,7 @@ import java.time.LocalDate
  * @property updatedAt Last update date.
  * @property deletedAt Deletion date.
  */
-class RecurringExpense(
+data class RecurringExpense(
     override val id: ExpenseId,
     override val userId: UserId,
     val status: RecurringExpenseStatus,

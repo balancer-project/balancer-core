@@ -59,8 +59,29 @@ class RecurringExpenseDbAdapter(
             .awaitRowsUpdated()
     }
 
-    suspend fun update(recurringExpense: RecurringExpense) {
-        TODO()
+    suspend fun update(recurringExpense: RecurringExpense) = recurringExpense.run {
+        databaseClient
+            .sql(UPDATE_SQL)
+            .bind(ID, id)
+            .bind(USER_ID, userId)
+            .bind(STATUS, status)
+            .bind(CATEGORY, category)
+            .bind(RECIPIENT_ID, recipientId)
+            .bind(CONCEPT, concept)
+            .bind(COMMENTS, comments)
+            .bind(AMOUNT, amount)
+            .bind(AMOUNT_TYPE, amountType)
+            .bind(PAYMENT_METHOD, paymentMethod)
+            .bind(FREQUENCY_TYPE, frequencyType)
+            .bindNullable(FREQUENCY_PARAMETER, frequencyParameter)
+            .bind(FIRST_PAYMENT_DATE, firstPaymentDate)
+            .bindNullable(LAST_PAYMENT_DATE, lastPaymentDate)
+            .bind(HIDDEN_IN_PLANS, hiddenInPlans)
+            .bind(CREATED_AT, createdAt)
+            .bind(UPDATED_AT, updatedAt)
+            .bindNullable(DELETED_AT, deletedAt)
+            .fetch()
+            .awaitRowsUpdated()
     }
 
     suspend fun findById(id: UUID): RecurringExpense? {
@@ -128,6 +149,28 @@ class RecurringExpenseDbAdapter(
                 :$UPDATED_AT,
                 :$DELETED_AT
             )
+        """
+
+        private const val UPDATE_SQL = """
+            update $TABLE set
+                $USER_ID = :$USER_ID,
+                $STATUS = :$STATUS,
+                $CATEGORY = :$CATEGORY,
+                $RECIPIENT_ID = :$RECIPIENT_ID,
+                $CONCEPT = :$CONCEPT,
+                $COMMENTS = :$COMMENTS,
+                $AMOUNT = :$AMOUNT,
+                $AMOUNT_TYPE = :$AMOUNT_TYPE,
+                $PAYMENT_METHOD = :$PAYMENT_METHOD,
+                $FREQUENCY_TYPE = :$FREQUENCY_TYPE,
+                $FREQUENCY_PARAMETER = :$FREQUENCY_PARAMETER,
+                $FIRST_PAYMENT_DATE = :$FIRST_PAYMENT_DATE,
+                $LAST_PAYMENT_DATE = :$LAST_PAYMENT_DATE,
+                $HIDDEN_IN_PLANS = :$HIDDEN_IN_PLANS,
+                $CREATED_AT = :$CREATED_AT,
+                $UPDATED_AT = :$UPDATED_AT,
+                $DELETED_AT = :$DELETED_AT
+            where $ID = :$ID
         """
 
         private const val SELECT_SQL = """

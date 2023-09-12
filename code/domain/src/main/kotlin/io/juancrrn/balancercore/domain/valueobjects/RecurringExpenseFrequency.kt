@@ -18,6 +18,7 @@ data class RecurringExpenseFrequency(
 
         MONTHLY_EXACT_DAY_OF_MONTH,
         MONTHLY_LAST_DAY_OF_MONTH,
+        MONTHLY_UNKNOWN,
         WEEKLY_EXACT_DAY_OF_WEEK,
         UNKNOWN,
     }

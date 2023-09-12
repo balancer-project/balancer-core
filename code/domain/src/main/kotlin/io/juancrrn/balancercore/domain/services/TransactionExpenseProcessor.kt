@@ -78,6 +78,20 @@ class TransactionExpenseProcessor(
         transaction: PreprocessedTransaction,
         expense: RecurringExpense,
     ): RecurringExpense {
-        TODO()
+        // If the expense was already done, ignore the transaction added event
+        if (expense.status == RecurringExpenseStatus.DONE) {
+            return expense
+        }
+
+        var updatedExpense = expense
+
+        val payment = transaction.toExpensePayment(expenseId = expense.id)
+        expensePaymentRepository.save(payment)
+
+        updatedExpense = updatedExpense.copy(
+            paymentsIds = updatedExpense.paymentsIds + payment.id,
+        )
+
+        return updatedExpense
     }
 }

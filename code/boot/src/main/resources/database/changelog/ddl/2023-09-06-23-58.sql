@@ -33,7 +33,7 @@ create table recurring_expense (
   amount_type varchar(64) not null,
   payment_method varchar(64) not null,
   frequency_type varchar(64) not null,
-  frequency_parameter integer not null,
+  frequency_parameter integer null,
   first_payment_date date not null,
   last_payment_date date null,
   hidden_in_plans boolean not null,
@@ -52,8 +52,8 @@ create table expense_payment (
   expense_id uuid not null,
   status varchar(64) not null,
   amount numeric not null,
-  authorization_date date null,
-  post_date date null
+  "date" date not null,
+  authorization_date date null
 );
 
 create table expense_payment_origin_transaction (
