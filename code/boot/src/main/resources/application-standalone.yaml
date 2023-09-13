@@ -31,7 +31,7 @@ spring:
             republishToDlq: false
 
 server:
-  port: 49152
+  port: 49182
 
 rest-server:
   cors:

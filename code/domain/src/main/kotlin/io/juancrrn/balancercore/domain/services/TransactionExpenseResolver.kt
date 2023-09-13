@@ -42,7 +42,7 @@ class TransactionExpenseResolver(
         val wordsInCommonPercentage = wordsInCommonPercentage(transaction.name, expense.concept)
         if (wordsInCommonPercentage > 0.60) {
             rate += 0.4f
-        } else if (wordsInCommonPercentage > 0.20) {
+        } else if (wordsInCommonPercentage < 0.20) {
             rate -= 0.4f
         }
 

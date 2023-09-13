@@ -31,7 +31,7 @@ class TransactionExpenseProcessor(
         expense: OneTimeExpense,
     ): OneTimeExpense {
         // If the expense was already done, ignore the transaction added event
-        if (expense.status == OneTimeExpenseStatus.PENDING) {
+        if (expense.status == OneTimeExpenseStatus.DONE) {
             return expense
         }
 
