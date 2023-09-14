@@ -40,3 +40,6 @@ Thumbs.db
 *.flv
 *.mov
 *.wmv
+
+# Local and dev Spring application properties override
+/application.yaml
