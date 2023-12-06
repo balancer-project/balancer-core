@@ -100,7 +100,7 @@ data class RegisterExpenseCommand(
         fun toVO(): RecurringExpenseFrequencyVO {
             return RecurringExpenseFrequencyVO(
                 type = type!!,
-                parameter = parameter!!,
+                parameter = parameter,
             )
         }
     }
